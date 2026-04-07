@@ -1,0 +1,67 @@
+title: Suspicious npm Lifecycle Hook Execution
+id: e5f6a7b8-c9d0-1234-ef01-345678901234
+status: stable
+level: medium
+description: |
+    Detects npm lifecycle hooks (preinstall, postinstall) executing shell commands,
+    which is a common technique in supply chain attacks including Operation Dream Job.
+references:
+    - https://github.com/Leviticus-Triage/operation-dream-job
+author: Leviticus-Triage
+date: 2026-02-28
+tags:
+    - attack.execution
+    - attack.t1204.002
+    - attack.persistence
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_npm_parent:
+        ParentCommandLine|contains: 'npm'
+    selection_shell_child:
+        CommandLine|contains:
+            - 'curl '
+            - 'wget '
+            - '/bin/sh'
+            - '/bin/bash'
+            - 'python'
+            - 'node -e'
+    condition: selection_npm_parent and selection_shell_child
+falsepositives:
+    - Legitimate build scripts using curl/wget in postinstall hooks
+    - Node.js native addon compilation (node-gyp)
+---
+title: setInterval-Based Persistence with Network Activity
+id: f6a7b8c9-d0e1-2345-f012-456789012345
+status: stable
+level: medium
+description: |
+    Detects Node.js processes with periodic network connections,
+    indicating timer-based C2 beacon (setInterval pattern).
+author: Leviticus-Triage
+date: 2026-02-28
+tags:
+    - attack.persistence
+    - attack.t1053.005
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: network_connection
+    product: linux
+detection:
+    selection:
+        Image|endswith: '/node'
+        dst_port:
+            - 1244
+            - 21
+            - 4444
+    filter_legitimate:
+        dst_ip|startswith:
+            - '10.'
+            - '172.16.'
+            - '192.168.'
+            - '127.'
+    condition: selection and not filter_legitimate
+falsepositives:
+    - Node.js applications legitimately connecting to external services on non-standard ports

@@ -1,0 +1,29 @@
+# Malware samples — NEVER commit actual malware
+samples/
+*.zip
+*.7z
+*.SECURE
+
+# PCAP captures (too large for git)
+*.pcap
+*.pcapng
+
+# Analysis output
+output/
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/

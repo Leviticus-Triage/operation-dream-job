@@ -1,0 +1,9 @@
+endpoint,method,function,response_code,response_size,notes
+/s/40abc1fa2901,GET,Campaign beacon / config,200,585,Base64-encoded C2 IP + victim ID
+/keys,POST,System recon exfiltration,200,n/a,FormData: ts type hid ss cc
+/uploads,POST,File exfiltration,200,n/a,Multipart form-data with file attachments
+/j/ryGnMe8,GET,Credential stealer download,200,20971,test.js
+/z/ryGnMe8,GET,File exfiltrator download,200,10560,p.js
+/o/ryGnMe8,GET,SSH/FTP RAT download,200,27415,njs_ryGnMe8.js
+/cli/ryGnMe8,GET,Python revshell download,200,8316,main_ryGnMe8.py (encoded)
+/p,GET,Package manifest download,200,327,package.json with malware deps

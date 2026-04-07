@@ -1,0 +1,15 @@
+type,value,port,asn,function,phase,status,first_seen
+c2_active,66.235.175.117,1244,AS397423,Operational C2 (Express.js),3,active,2026-02-27
+c2_ftp,66.235.175.117,21,AS397423,FTP exfiltration (pyftpdlib),3,active,2026-02-27
+c2_ssh,66.235.175.117,22,AS397423,Remote access,3,active,2026-02-27
+c2_primary,147.124.202.225,1244,AS397423,Primary C2,1,offline,2026-02-19
+c2_fallback,38.92.47.157,1244,AS397423,Config server,1,active,2026-02-19
+c2_alt,4.202.147.122,,AS8075,Statically identified C2,1,,2026-02-19
+downloader,gurucooldown.short.gy,,n/a,Shell downloader (Stage 1),1,,2026-02-19
+redirect,alanservice.vercel.app,,Vercel,Payload server redirect,1,,2026-02-19
+stage2,jsonkeeper.com/b/QWY20,,n/a,eval() payload host,1,,2026-02-19
+social_eng,orderbuddyapp.com,,AS8075,Fake product site (Azure),1,,2025-09-24
+social_eng,orderbuddyshop.com,,Hostinger,Fake marketing site,1,,2026-01-01
+social_eng,linkedin.com/in/kendall-mareth-lopez-diaz-3a5437365,,LinkedIn,Fake recruiter profile,1,,2026-02-19
+social_eng,linkedin.com/company/orderbuddyshop,,LinkedIn,Fake company page,1,,2026-02-19
+geoip,ip-api.com,,n/a,Victim geolocation lookup,3,,2026-02-27

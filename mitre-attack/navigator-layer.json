@@ -1,0 +1,217 @@
+{
+  "name": "OrderBuddy Campaign (Operation Dream Job)",
+  "versions": {
+    "attack": "14",
+    "navigator": "4.9.1",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "MITRE ATT&CK mapping for the OrderBuddy LinkedIn malware campaign (Lazarus Group / Operation Dream Job). Campaign ID: 40abc1fa2901.",
+  "filters": {
+    "platforms": ["Linux", "macOS", "Windows"]
+  },
+  "sorting": 0,
+  "layout": {
+    "layout": "side",
+    "aggregateFunction": "average",
+    "showID": true,
+    "showName": true,
+    "showAggregateScores": false,
+    "countUnscored": false
+  },
+  "hideDisabled": false,
+  "techniques": [
+    {
+      "techniqueID": "T1583.001",
+      "tactic": "resource-development",
+      "color": "#c93b3b",
+      "comment": "orderbuddyapp.com (Azure CDN), orderbuddyshop.com (Hostinger BR) — two professional fake websites",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1585.001",
+      "tactic": "resource-development",
+      "color": "#c93b3b",
+      "comment": "LinkedIn fake recruiter profile (kendall-mareth-lopez-diaz), LinkedIn company page",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1593.001",
+      "tactic": "reconnaissance",
+      "color": "#e07941",
+      "comment": "Target profiled via LinkedIn — tailored outreach to software developers",
+      "enabled": true,
+      "score": 75
+    },
+    {
+      "techniqueID": "T1566.001",
+      "tactic": "initial-access",
+      "color": "#c93b3b",
+      "comment": "orderbuddy-main.zip delivered as fake coding assignment via LinkedIn DM",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1566.002",
+      "tactic": "initial-access",
+      "color": "#c93b3b",
+      "comment": "LinkedIn DM with download link, gurucooldown.short.gy redirector",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1204.002",
+      "tactic": "execution",
+      "color": "#c93b3b",
+      "comment": "Victim opens folder (tasks.json auto-exec) or runs npm run build (webpack)",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1059.007",
+      "tactic": "execution",
+      "color": "#c93b3b",
+      "comment": "webpack.config.js, test.js, p.js, njs_ryGnMe8.js — all JavaScript payloads",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1059.006",
+      "tactic": "execution",
+      "color": "#c93b3b",
+      "comment": "main_ryGnMe8.py — Python reverse shell (Base85+XOR+zlib)",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1053.005",
+      "tactic": "persistence",
+      "color": "#e07941",
+      "comment": "setInterval(615968ms) ≈ 10.3 min re-beacon cycle, max 3 cycles",
+      "enabled": true,
+      "score": 75
+    },
+    {
+      "techniqueID": "T1027",
+      "tactic": "defense-evasion",
+      "color": "#c93b3b",
+      "comment": "5-layer: string-array rotation (60 shifts), XOR, Base64, Base85, zlib",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1027.010",
+      "tactic": "defense-evasion",
+      "color": "#c93b3b",
+      "comment": "208 whitespace characters hiding shell commands in tasks.json",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1036",
+      "tactic": "defense-evasion",
+      "color": "#e07941",
+      "comment": "Masquerading as legitimate VS Code/Webpack project structure",
+      "enabled": true,
+      "score": 75
+    },
+    {
+      "techniqueID": "T1497",
+      "tactic": "defense-evasion",
+      "color": "#e0c441",
+      "comment": "Anti-debug via recursive toString() console trap",
+      "enabled": true,
+      "score": 50
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "color": "#c93b3b",
+      "comment": "hostname, platform, userInfo, argv collected via POST /keys",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1083",
+      "tactic": "discovery",
+      "color": "#e07941",
+      "comment": "find-based search for .env, *.key, *.pem, *.sqlite across home directory",
+      "enabled": true,
+      "score": 75
+    },
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "color": "#c93b3b",
+      "comment": ".env, private keys, SQLite databases, Python source code",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1552.001",
+      "tactic": "credential-access",
+      "color": "#c93b3b",
+      "comment": "Chrome/Edge/Opera/Brave Login Data, Cookies (up to 200 profiles per browser)",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1552.004",
+      "tactic": "credential-access",
+      "color": "#c93b3b",
+      "comment": "*.key, *.pem, id_rsa, *.p12, *.pfx, *.keystore targeted",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "color": "#c93b3b",
+      "comment": "HTTP GET/POST on port 1244 (Express.js). Triple fallback chain across AS397423",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "color": "#c93b3b",
+      "comment": "4 payload modules: /j/ (stealer), /z/ (exfil), /o/ (RAT), /cli/ (revshell)",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "color": "#c93b3b",
+      "comment": "POST /keys (recon), POST /uploads (browser data, files) over C2 channel",
+      "enabled": true,
+      "score": 100
+    },
+    {
+      "techniqueID": "T1048",
+      "tactic": "exfiltration",
+      "color": "#c93b3b",
+      "comment": "FTP (pyftpdlib port 21), SSH (port 22) for large file exfiltration",
+      "enabled": true,
+      "score": 100
+    }
+  ],
+  "gradient": {
+    "colors": ["#e0c441", "#e07941", "#c93b3b"],
+    "minValue": 0,
+    "maxValue": 100
+  },
+  "legendItems": [
+    { "label": "Confirmed (dynamic analysis)", "color": "#c93b3b" },
+    { "label": "Confirmed (static analysis)", "color": "#e07941" },
+    { "label": "Inferred", "color": "#e0c441" }
+  ],
+  "metadata": [
+    { "name": "campaign", "value": "OrderBuddy (40abc1fa2901)" },
+    { "name": "attribution", "value": "Lazarus Group / DPRK" },
+    { "name": "analyst", "value": "Leviticus-Triage" },
+    { "name": "date", "value": "2026-02-28" }
+  ]
+}

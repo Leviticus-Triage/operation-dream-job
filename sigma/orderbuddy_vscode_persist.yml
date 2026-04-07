@@ -1,0 +1,90 @@
+title: OrderBuddy .vscode Persistence — npm Install in User Config
+id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+status: stable
+level: high
+description: |
+    Detects npm install execution within the user's .vscode directory,
+    which is the persistence mechanism used by the OrderBuddy campaign.
+    Legitimate VS Code extensions do not use npm install in ~/.vscode/.
+references:
+    - https://github.com/Leviticus-Triage/operation-dream-job
+author: Leviticus-Triage
+date: 2026-02-28
+tags:
+    - attack.persistence
+    - attack.t1053.005
+    - attack.defense_evasion
+    - attack.t1036
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_npm:
+        CommandLine|contains:
+            - 'npm install'
+            - 'npm i '
+    selection_vscode_dir:
+        CommandLine|contains: '.vscode'
+    condition: selection_npm and selection_vscode_dir
+falsepositives:
+    - Manual npm install by developer in .vscode extension development (rare)
+---
+title: OrderBuddy node test.js Execution from .vscode
+id: c3d4e5f6-a7b8-9012-cdef-123456789012
+status: stable
+level: critical
+description: |
+    Detects execution of test.js from the .vscode directory — the main
+    credential stealer payload of the OrderBuddy campaign.
+author: Leviticus-Triage
+date: 2026-02-28
+tags:
+    - attack.execution
+    - attack.t1059.007
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection:
+        CommandLine|contains|all:
+            - 'node'
+            - '.vscode'
+            - 'test.js'
+    condition: selection
+falsepositives:
+    - Very unlikely in production environments
+---
+title: OrderBuddy VS Code Auto-Task Execution
+id: d4e5f6a7-b8c9-0123-def0-234567890123
+status: stable
+level: high
+description: |
+    Detects VS Code/Cursor spawning shell processes immediately after
+    folder open, which indicates tasks.json auto-execution abuse.
+author: Leviticus-Triage
+date: 2026-02-28
+tags:
+    - attack.execution
+    - attack.t1204.002
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_parent:
+        ParentImage|endswith:
+            - '\code.exe'
+            - '\cursor.exe'
+    selection_child:
+        Image|endswith:
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\bash.exe'
+    selection_suspicious:
+        CommandLine|contains:
+            - 'curl'
+            - 'wget'
+            - 'short.gy'
+            - 'vercel.app'
+    condition: selection_parent and selection_child and selection_suspicious
+falsepositives:
+    - Legitimate VS Code tasks that call curl/wget (review individually)

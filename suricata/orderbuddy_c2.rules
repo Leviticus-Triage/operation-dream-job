@@ -1,0 +1,49 @@
+# OrderBuddy / Operation Dream Job — Suricata IDS Rules
+# Author: Leviticus-Triage
+# Date: 2026-02-28
+# Reference: https://github.com/Leviticus-Triage/operation-dream-job
+
+# C2 Beacon — Campaign ID in URI
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY C2 Beacon - Campaign ID 40abc1fa2901"; flow:to_server,established; http.uri; content:"/s/40abc1fa2901"; classtype:trojan-activity; sid:2026001; rev:1; metadata:created_at 2026_02_28, updated_at 2026_02_28;)
+
+# C2 Exfiltration — POST /keys
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY C2 Exfil - POST /keys (system recon)"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/keys"; http.header; content:"multipart/form-data"; classtype:trojan-activity; sid:2026002; rev:1; metadata:created_at 2026_02_28;)
+
+# C2 Exfiltration — POST /uploads
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY C2 Exfil - POST /uploads (file exfiltration)"; flow:to_server,established; http.method; content:"POST"; http.uri; content:"/uploads"; classtype:trojan-activity; sid:2026003; rev:1; metadata:created_at 2026_02_28;)
+
+# Payload Download — test.js (credential stealer)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY Payload Download - test.js credential stealer"; flow:to_server,established; http.uri; content:"/j/ryGnMe8"; classtype:trojan-activity; sid:2026004; rev:1; metadata:created_at 2026_02_28;)
+
+# Payload Download — p.js (file exfiltrator)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY Payload Download - p.js file exfiltrator"; flow:to_server,established; http.uri; content:"/z/ryGnMe8"; classtype:trojan-activity; sid:2026005; rev:1; metadata:created_at 2026_02_28;)
+
+# Payload Download — njs (SSH/FTP RAT)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY Payload Download - njs SSH/FTP RAT"; flow:to_server,established; http.uri; content:"/o/ryGnMe8"; classtype:trojan-activity; sid:2026006; rev:1; metadata:created_at 2026_02_28;)
+
+# Payload Download — main.py (reverse shell)
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY Payload Download - Python reverse shell"; flow:to_server,established; http.uri; content:"/cli/ryGnMe8"; classtype:trojan-activity; sid:2026007; rev:1; metadata:created_at 2026_02_28;)
+
+# Known C2 IP — Active operational server
+alert ip $HOME_NET any -> 66.235.175.117 any (msg:"ORDERBUDDY Known C2 IP - Active operational C2"; classtype:trojan-activity; sid:2026008; rev:1; metadata:created_at 2026_02_28;)
+
+# Known C2 IP — Fallback config server
+alert ip $HOME_NET any -> 38.92.47.157 any (msg:"ORDERBUDDY Known C2 IP - Fallback config server"; classtype:trojan-activity; sid:2026009; rev:1; metadata:created_at 2026_02_28;)
+
+# Known C2 IP — Primary (offline)
+alert ip $HOME_NET any -> 147.124.202.225 any (msg:"ORDERBUDDY Known C2 IP - Primary C2"; classtype:trojan-activity; sid:2026010; rev:1; metadata:created_at 2026_02_28;)
+
+# Known C2 IP — Alternative (Azure)
+alert ip $HOME_NET any -> 4.202.147.122 any (msg:"ORDERBUDDY Known C2 IP - Alternative C2 (Azure)"; classtype:trojan-activity; sid:2026011; rev:1; metadata:created_at 2026_02_28;)
+
+# Port 1244 HTTP — Non-standard C2 port
+alert http $HOME_NET any -> $EXTERNAL_NET 1244 (msg:"ORDERBUDDY Suspicious HTTP on port 1244 - possible C2"; flow:to_server,established; classtype:trojan-activity; sid:2026012; rev:1; metadata:created_at 2026_02_28;)
+
+# Stage 1 Downloader — short.gy redirect
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY Stage1 Downloader - gurucooldown.short.gy"; flow:to_server,established; http.host; content:"gurucooldown.short.gy"; classtype:trojan-activity; sid:2026013; rev:1; metadata:created_at 2026_02_28;)
+
+# Stage 1 Redirect — Vercel payload server
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY Stage1 Redirect - alanservice.vercel.app"; flow:to_server,established; http.host; content:"alanservice.vercel.app"; classtype:trojan-activity; sid:2026014; rev:1; metadata:created_at 2026_02_28;)
+
+# Stage 2 — eval() payload from jsonkeeper
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"ORDERBUDDY Stage2 - jsonkeeper.com eval payload"; flow:to_server,established; http.host; content:"jsonkeeper.com"; http.uri; content:"/b/QWY20"; classtype:trojan-activity; sid:2026015; rev:1; metadata:created_at 2026_02_28;)

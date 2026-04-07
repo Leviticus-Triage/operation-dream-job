@@ -1,0 +1,64 @@
+title: OrderBuddy C2 Beacon Communication
+id: f3a1c2d4-5b6e-7f8a-9c0d-1e2f3a4b5c6d
+status: stable
+level: critical
+description: |
+    Detects network communication to known OrderBuddy / Operation Dream Job C2 infrastructure.
+    All C2 servers are hosted on AS397423 (Tier.Net Technologies LLC) and communicate on port 1244.
+references:
+    - https://github.com/Leviticus-Triage/operation-dream-job
+author: Leviticus-Triage
+date: 2026-02-28
+tags:
+    - attack.command_and_control
+    - attack.t1071.001
+    - attack.t1105
+    - attack.exfiltration
+    - attack.t1041
+logsource:
+    category: firewall
+detection:
+    selection_c2_ips:
+        dst_ip|contains:
+            - '66.235.175.117'
+            - '38.92.47.157'
+            - '147.124.202.225'
+            - '4.202.147.122'
+    selection_c2_port:
+        dst_port: 1244
+    selection_c2_endpoints:
+        url|contains:
+            - '/s/40abc1fa2901'
+            - '/keys'
+            - '/uploads'
+            - '/j/ryGnMe8'
+            - '/z/ryGnMe8'
+            - '/o/ryGnMe8'
+            - '/cli/ryGnMe8'
+    condition: selection_c2_ips or selection_c2_port or selection_c2_endpoints
+falsepositives:
+    - Legitimate traffic to Tier.Net hosted services (unlikely on port 1244)
+---
+title: OrderBuddy C2 Beacon via DNS
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+status: stable
+level: high
+description: Detects DNS resolution of known OrderBuddy campaign domains.
+author: Leviticus-Triage
+date: 2026-02-28
+tags:
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: dns
+detection:
+    selection:
+        query|contains:
+            - 'gurucooldown.short.gy'
+            - 'alanservice.vercel.app'
+            - 'orderbuddyapp.com'
+            - 'orderbuddyshop.com'
+            - 'jsonkeeper.com'
+    condition: selection
+falsepositives:
+    - jsonkeeper.com is a legitimate paste service and may produce false positives in isolation

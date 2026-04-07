@@ -1,0 +1,48 @@
+version: "3.8"
+
+# Isolated analysis environment for examining OrderBuddy samples
+# WARNING: Do NOT use Modus B (live C2) without understanding the risks.
+
+services:
+  # Modus A: Fully isolated static analysis (SAFE)
+  analysis-static:
+    image: node:20-slim
+    network_mode: none
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:size=512m
+    volumes:
+      - ./samples:/sandbox/samples:ro
+      - ./output:/sandbox/output:rw
+    working_dir: /sandbox
+    entrypoint: ["/bin/bash"]
+    profiles:
+      - static
+
+  # Modus B: Dynamic analysis with network (DANGEROUS)
+  # Only use in a disposable VM with no sensitive data
+  analysis-dynamic:
+    image: node:20-slim
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_RAW
+    tmpfs:
+      - /tmp:size=1g
+    volumes:
+      - ./samples:/sandbox/samples:ro
+      - ./output:/sandbox/output:rw
+      - ./pcap:/sandbox/pcap:rw
+    working_dir: /sandbox
+    entrypoint: ["/bin/bash"]
+    profiles:
+      - dynamic
+    # Install tshark for PCAP capture:
+    # apt-get update && apt-get install -y tshark inotify-tools
+    # tshark -i eth0 -w /sandbox/pcap/capture.pcap &
